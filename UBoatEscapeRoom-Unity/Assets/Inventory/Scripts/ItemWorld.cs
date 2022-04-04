@@ -23,19 +23,7 @@ public class ItemWorld : CacheBehaviour2D
         return itemWorld;
     }
 
-
     private Item item;
-    private SpriteRenderer spriteRenderer;
-    private Light light2D;
-    private TextMeshPro textMeshPro;
-
-    private void Awake() 
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        light2D = transform.Find("Light").GetComponent<Light>();
-        textMeshPro = transform.Find("Text").GetComponent<TextMeshPro>();
-    }
-
     public void SetItem(Item item) 
     {
         this.item = item;

@@ -30,7 +30,7 @@ namespace UBER.Core.Interaction
         public RaycastHit2D hit;
         private GameObject objectHit;
         private UBER.Inventory.Inventory inventory;
-        private float interactInput;
+        private float interactInput;                                
         private bool hasInteracted;
 
         private void OnEnable() => playerInteractionAction.Enable();
@@ -67,11 +67,9 @@ namespace UBER.Core.Interaction
         private void Interaction()
         {
 
-            if (playerInteractionAction.triggered && hit.collider != null)
-            {
-                objectHit = hit.collider.gameObject;
-                if (objectHit != null) hasInteracted = true;
-            }
+            if (!playerInteractionAction.triggered || hit.collider == null) return;
+            objectHit = hit.collider.gameObject;
+            if (objectHit != null) hasInteracted = true;
         }
         public void OnPointerClick(PointerEventData eventData) // 3
         {

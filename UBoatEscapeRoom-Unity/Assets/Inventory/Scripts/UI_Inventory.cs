@@ -3,19 +3,20 @@ using UnityEngine.UI;
 using TMPro;
 using UBER.Core.Player;
 using UBER.Inventory;
+using UBER.Util;
 using UBER.Utils;
 
 public class UI_Inventory : MonoBehaviour 
 {
 
     private Inventory inventory;
-    private Transform itemSlotContainer;
-    private Transform itemSlotTemplate;
+    [SerializeField] private Transform itemSlotContainer;
+    [SerializeField] private Transform itemSlotTemplate;
 
-    private void Awake() 
+    private void Awake()
     {
-        itemSlotContainer = transform.Find("itemSlotContainer");
-        itemSlotTemplate = itemSlotContainer.Find("itemSlotTemplate");
+        itemSlotContainer ??= transform.Find("itemSlotContainer");
+        itemSlotTemplate ??= itemSlotContainer.Find("itemSlotTemplate");
     }
 
     public void SetInventory(Inventory inventory) 
@@ -51,7 +52,7 @@ public class UI_Inventory : MonoBehaviour
                 // Drop item
                 Item duplicateItem = new Item { itemType = item.itemType, amount = item.amount };
                 inventory.RemoveItem(item);
-                ItemWorld.DropItem(Movement.mainCamera.transform.position, duplicateItem);
+                ItemWorld.DropItem(CacheBehaviour2D.mainCamera.transform.position, duplicateItem);
             };
 
             itemSlotRectTransform.anchoredPosition = new Vector2(x * itemSlotCellSize, -y * itemSlotCellSize);
