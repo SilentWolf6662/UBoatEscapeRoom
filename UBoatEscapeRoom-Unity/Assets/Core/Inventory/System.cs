@@ -1,46 +1,52 @@
 ﻿#region Copyright Notice
+
 // ******************************************************************************************************************
 // 
-// UBoatEscapeRoom-Unity.UBER.System.cs © SilentWolf6662 - All Rights Reserved
+// UBoatEscapeRoom-Unity.UBER.Player.System.cs © SilentWolf6662 - All Rights Reserved
 // Unauthorized copying of this file, via any medium is strictly prohibited
 // Proprietary and confidential
 // 
 // This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 // To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
 // 
-// Created & Copyrighted @ 2022-03-29
+// Created & Copyrighted @ 2022-04-05
 // 
 // ******************************************************************************************************************
+
 #endregion
+#region
+
 using UBER.Core.Interaction;
 using UBER.Core.Player;
 using UBER.Util;
 using UnityEngine;
+
+#endregion
 namespace UBER.Core.Inventory
 {
     public class System : CacheBehaviour2D
     {
-        
+
 
         public Texture cursorTexture;
         public Movement playerController;
         public PickItem[] availableItems; //List with Prefabs of all the available items
         [SerializeField] private InteractableSystem interactableSystem;
+        public bool showInventory;
 
         //Available items slots
         private readonly int[] itemSlots = new int[12];
-        public bool showInventory;
-        private float windowAnimation = 1;
         private float animationTimer;
-
-        //UI Drag & Drop
-        private int hoveringOverIndex = -1;
-        private int itemIndexToDrag = -1;
-        private Vector2 dragOffset = Vector2.zero;
 
         //Item Pick up
         private PickItem detectedItem;
         private int detectedItemIndex;
+        private Vector2 dragOffset = Vector2.zero;
+
+        //UI Drag & Drop
+        private int hoveringOverIndex = -1;
+        private int itemIndexToDrag = -1;
+        private float windowAnimation = 1;
 
         // Start is called before the first frame update
         private void Start()

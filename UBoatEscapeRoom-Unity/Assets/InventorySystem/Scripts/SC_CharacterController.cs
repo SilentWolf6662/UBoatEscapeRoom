@@ -1,10 +1,25 @@
-﻿//You are free to use this script in Free or Commercial projects
-//sharpcoderblog.com @2019
+﻿#region Copyright Notice
+
+// ******************************************************************************************************************
+// 
+// UBoatEscapeRoom-Unity.UBER.Player.SC_CharacterController.cs © SilentWolf6662 - All Rights Reserved
+// Unauthorized copying of this file, via any medium is strictly prohibited
+// Proprietary and confidential
+// 
+// This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+// To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
+// 
+// Created & Copyrighted @ 2022-04-05
+// 
+// ******************************************************************************************************************
+
+#endregion
+#region
 
 using UnityEngine;
 
+#endregion
 [RequireComponent(typeof(CharacterController))]
-
 public class SC_CharacterController : MonoBehaviour
 {
     public float speed = 7.5f;
@@ -14,12 +29,12 @@ public class SC_CharacterController : MonoBehaviour
     public float lookSpeed = 2.0f;
     public float lookXLimit = 60.0f;
 
+    [HideInInspector]
+    public bool canMove = true;
+
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
     private Vector2 rotation = Vector2.zero;
-
-    [HideInInspector]
-    public bool canMove = true;
 
     private void Start()
     {
@@ -36,12 +51,10 @@ public class SC_CharacterController : MonoBehaviour
             Vector3 right = transform.TransformDirection(Vector3.right);
             float curSpeedX = speed * Input.GetAxis("Vertical");
             float curSpeedY = speed * Input.GetAxis("Horizontal");
-            moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+            moveDirection = forward * curSpeedX + right * curSpeedY;
 
             if (Input.GetButton("Jump"))
-            {
                 moveDirection.y = jumpSpeed;
-            }
         }
 
         // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below

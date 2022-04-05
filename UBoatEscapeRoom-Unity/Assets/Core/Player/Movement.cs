@@ -1,36 +1,42 @@
 ﻿#region Copyright Notice
+
 // ******************************************************************************************************************
 // 
-// UBER.Player.Movement.cs © SilentWolf6662 - All Rights Reserved
+// UBoatEscapeRoom-Unity.UBER.Player.Movement.cs © SilentWolf6662 - All Rights Reserved
 // Unauthorized copying of this file, via any medium is strictly prohibited
 // Proprietary and confidential
 // 
 // This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 // To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
 // 
-// Created & Copyrighted @ 2022-03-17
+// Created & Copyrighted @ 2022-04-05
 // 
 // ******************************************************************************************************************
+
 #endregion
+#region
+
 using UBER.Util;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+#endregion
 namespace UBER.Core.Player
 {
     public class Movement : CacheBehaviour2D
     {
         [SerializeField] private float speed = 30;
         [SerializeField] private InputAction playerMovementAction;
-        private Vector2 moveInput;
         public bool canMove;
-
-        private void OnEnable() => playerMovementAction.Enable();
-
-        private void OnDisable() => playerMovementAction.Disable();
+        private Vector2 moveInput;
 
         private void Update() => moveInput = playerMovementAction.ReadValue<Vector2>();
 
         private void FixedUpdate() => MovePlayer();
+
+        private void OnEnable() => playerMovementAction.Enable();
+
+        private void OnDisable() => playerMovementAction.Disable();
 
         private void MovePlayer()
         {

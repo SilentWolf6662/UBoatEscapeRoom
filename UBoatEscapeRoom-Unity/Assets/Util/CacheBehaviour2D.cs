@@ -2,14 +2,14 @@
 
 // ******************************************************************************************************************
 // 
-// SWolfFrame.Utilities.CacheBehaviour.cs © SilentWolf6662 - All Rights Reserved
+// UBoatEscapeRoom-Unity.UBER.Player.CacheBehaviour2D.cs © SilentWolf6662 - All Rights Reserved
 // Unauthorized copying of this file, via any medium is strictly prohibited
 // Proprietary and confidential
 // 
 // This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 // To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
 // 
-// Created & Copyrighted @ 2022-02-23
+// Created & Copyrighted @ 2022-04-05
 // 
 // ******************************************************************************************************************
 
@@ -31,92 +31,98 @@ namespace UBER.Util
     /// </summary>
     public abstract class CacheBehaviour2D : MonoBehaviour
     {
+
+        protected const string playerTag = "Player";
+        [NonSerialized] private static Camera _mainCamera;
         [NonSerialized] private Animation _animation;
         [NonSerialized] private AudioSource _audio;
         [NonSerialized] private Camera _camera;
+        [NonSerialized] private CanvasGroup _canvasGroup;
         [NonSerialized] private Collider2D _collider2D;
         [NonSerialized] private ConstantForce _constantForce;
         [NonSerialized] private HingeJoint _hingeJoint;
         [NonSerialized] private Light _light;
         [NonSerialized] private Light _light2D;
         [NonSerialized] private ParticleSystem _particleSystem;
+        [NonSerialized] private RectTransform _rectTransform;
         [NonSerialized] private Renderer _renderer;
         [NonSerialized] private Rigidbody2D _rigidbody2D;
-        [NonSerialized] private Transform _transform;
-        [NonSerialized] private TextMeshPro _textMeshPro;
         [NonSerialized] private SpriteRenderer _spriteRenderer;
-        [NonSerialized] private static Camera _mainCamera;
-
-        protected const string playerTag = "Player";
-        private void Awake()
-        {
-            _mainCamera = GetMainCamera();
-            OnAwake();
-        }
-        protected virtual void OnAwake() {}
+        [NonSerialized] private TextMeshPro _textMeshPro;
+        [NonSerialized] private Transform _transform;
 
         protected internal static Camera mainCamera => _mainCamera;
 
         /// <summary>
         ///     Gets the Animation attached to the object.
         /// </summary>
-        public Animation animation => _animation ? _animation : _animation = GetComponent<Animation>();
+        public new Animation animation => _animation ? _animation : _animation = GetComponent<Animation>();
 
         /// <summary>
         ///     Gets the AudioSource attached to the object.
         /// </summary>
-        public AudioSource audio => _audio ? _audio : _audio = GetComponent<AudioSource>();
+        public new AudioSource audio => _audio ? _audio : _audio = GetComponent<AudioSource>();
 
         /// <summary>
         ///     Gets the Camera attached to the object.
         /// </summary>
-        public Camera camera => _camera ? _camera : _camera = GetComponent<Camera>();
+        public new Camera camera => _camera ? _camera : _camera = GetComponent<Camera>();
 
         /// <summary>
         ///     Gets the Collider2D attached to the object.
         /// </summary>
-        public Collider2D collider2D => _collider2D ? _collider2D : _collider2D = GetComponent<Collider2D>();
+        public new Collider2D collider2D => _collider2D ? _collider2D : _collider2D = GetComponent<Collider2D>();
 
         /// <summary>
         ///     Gets the ConstantForce attached to the object.
         /// </summary>
-        public ConstantForce constantForce => _constantForce ? _constantForce : _constantForce = GetComponent<ConstantForce>();
+        public new ConstantForce constantForce => _constantForce ? _constantForce : _constantForce = GetComponent<ConstantForce>();
 
         /// <summary>
         ///     Gets the HingeJoint attached to the object.
         /// </summary>
-        public HingeJoint hingeJoint => _hingeJoint ? _hingeJoint : _hingeJoint = GetComponent<HingeJoint>();
+        public new HingeJoint hingeJoint => _hingeJoint ? _hingeJoint : _hingeJoint = GetComponent<HingeJoint>();
 
         /// <summary>
         ///     Gets the Light attached to the object.
         /// </summary>
-        public Light light => _light ? _light : _light = GetComponent<Light>();
+        public new Light light => _light ? _light : _light = GetComponent<Light>();
 
-        public Light light2D => _light2D ? _light2D : _light2D = transform.Find("Light").GetComponent<Light>();
+        protected Light light2D => _light2D ? _light2D : _light2D = transform.Find("Light").GetComponent<Light>();
 
         /// <summary>
         ///     Gets the ParticleSystem attached to the object.
         /// </summary>
-        public ParticleSystem particleSystem => _particleSystem ? _particleSystem : _particleSystem = GetComponent<ParticleSystem>();
+        public new ParticleSystem particleSystem => _particleSystem ? _particleSystem : _particleSystem = GetComponent<ParticleSystem>();
 
         /// <summary>
         ///     Gets the Renderer attached to the object.
         /// </summary>
-        public Renderer renderer => _renderer ? _renderer : _renderer = GetComponent<Renderer>();
+        public new Renderer renderer => _renderer ? _renderer : _renderer = GetComponent<Renderer>();
 
         /// <summary>
         ///     Gets the Rigidbody2D attached to the object.
         /// </summary>
-        protected Rigidbody2D rigidbody2D => _rigidbody2D ? _rigidbody2D : _rigidbody2D = GetComponent<Rigidbody2D>();
+        protected new Rigidbody2D rigidbody2D => _rigidbody2D ? _rigidbody2D : _rigidbody2D = GetComponent<Rigidbody2D>();
 
         /// <summary>
         ///     Gets the Transform attached to the object.
         /// </summary>
         protected new Transform transform => _transform ? _transform : _transform = base.transform;
 
+        protected RectTransform rectTransform => _rectTransform ? _rectTransform : _rectTransform = GetComponent<RectTransform>();
+
+        protected CanvasGroup canvasGroup => _canvasGroup ? _canvasGroup : _canvasGroup = GetComponent<CanvasGroup>();
+
         protected TextMeshPro textMeshPro => _textMeshPro ? _textMeshPro : _textMeshPro = transform.Find("Text").GetComponent<TextMeshPro>();
 
         protected SpriteRenderer spriteRenderer => _spriteRenderer ? _spriteRenderer : _spriteRenderer = GetComponent<SpriteRenderer>();
+        private void Awake()
+        {
+            _mainCamera = GetMainCamera();
+            OnAwake();
+        }
+        protected virtual void OnAwake() {}
 
         private static Camera GetMainCamera() => _mainCamera ? _mainCamera : _mainCamera = Camera.main;
     }
