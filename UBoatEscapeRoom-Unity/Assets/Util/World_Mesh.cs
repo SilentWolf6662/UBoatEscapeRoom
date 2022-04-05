@@ -9,7 +9,7 @@
 // This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 // To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
 // 
-// Created & Copyrighted @ 2022-03-29
+// Created & Copyrighted @ 2022-04-05
 // 
 // ******************************************************************************************************************
 
@@ -117,11 +117,12 @@ namespace UBER.Utils
         private Vector2 ConvertPixelsToUVCoordinates(int x, int y, int textureWidth, int textureHeight) => new Vector2((float)x / textureWidth, (float)y / textureHeight);
 
         private Vector2[] GetUVRectangleFromPixels(int x, int y, int width, int height, int textureWidth, int textureHeight) =>
-            /* 0, 1
-             * 1, 1
-             * 0, 0
-             * 1, 0
-             * */
+            /*
+             0, 1
+             1, 1
+             0, 0
+             1, 0
+             */
             new Vector2[]
             {
                 ConvertPixelsToUVCoordinates(x, y + height, textureWidth, textureHeight),
