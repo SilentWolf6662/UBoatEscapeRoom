@@ -1,32 +1,21 @@
-﻿#region Copyright Notice
-
-// ******************************************************************************************************************
-// 
-// UBoatEscapeRoom-Unity.UBER.Player.SC_PickItem.cs © SilentWolf6662 - All Rights Reserved
-// Unauthorized copying of this file, via any medium is strictly prohibited
-// Proprietary and confidential
-// 
-// This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
-// To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
-// 
-// Created & Copyrighted @ 2022-04-05
-// 
-// ******************************************************************************************************************
-
-#endregion
-#region
+﻿//You are free to use this script in Free or Commercial projects
+//sharpcoderblog.com @2019
 
 using UnityEngine;
 
-#endregion
 public class SC_PickItem : MonoBehaviour
 {
     public string itemName = "Some Item"; //Each item must have an unique name
     public Texture itemPreview;
 
-    private void Start() =>
+    private void Start()
+    {
         //Change item tag to Respawn to detect when we look at it
         gameObject.tag = "Respawn";
+    }
 
-    public void PickItem() => Destroy(gameObject);
+    public void PickItem()
+    {
+        Destroy(gameObject);
+    }
 }

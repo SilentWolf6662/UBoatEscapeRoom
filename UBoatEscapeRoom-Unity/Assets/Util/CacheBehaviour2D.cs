@@ -2,14 +2,14 @@
 
 // ******************************************************************************************************************
 // 
-// UBoatEscapeRoom-Unity.UBER.Player.CacheBehaviour2D.cs © SilentWolf6662 - All Rights Reserved
+// SWolfFrame.Utilities.CacheBehaviour.cs © SilentWolf6662 - All Rights Reserved
 // Unauthorized copying of this file, via any medium is strictly prohibited
 // Proprietary and confidential
 // 
 // This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 // To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
 // 
-// Created & Copyrighted @ 2022-04-05
+// Created & Copyrighted @ 2022-02-23
 // 
 // ******************************************************************************************************************
 
@@ -17,7 +17,6 @@
 #region
 
 using System;
-using TMPro;
 using UnityEngine;
 
 #endregion
@@ -31,25 +30,26 @@ namespace UBER.Util
     /// </summary>
     public abstract class CacheBehaviour2D : MonoBehaviour
     {
-
-        protected const string playerTag = "Player";
-        [NonSerialized] private static Camera _mainCamera;
         [NonSerialized] private Animation _animation;
         [NonSerialized] private AudioSource _audio;
         [NonSerialized] private Camera _camera;
-        [NonSerialized] private CanvasGroup _canvasGroup;
         [NonSerialized] private Collider2D _collider2D;
         [NonSerialized] private ConstantForce _constantForce;
         [NonSerialized] private HingeJoint _hingeJoint;
         [NonSerialized] private Light _light;
-        [NonSerialized] private Light _light2D;
         [NonSerialized] private ParticleSystem _particleSystem;
-        [NonSerialized] private RectTransform _rectTransform;
         [NonSerialized] private Renderer _renderer;
         [NonSerialized] private Rigidbody2D _rigidbody2D;
-        [NonSerialized] private SpriteRenderer _spriteRenderer;
-        [NonSerialized] private TextMeshPro _textMeshPro;
         [NonSerialized] private Transform _transform;
+        [NonSerialized] private static Camera _mainCamera;
+
+        protected const string playerTag = "Player";
+        private void Awake()
+        {
+            _mainCamera = GetMainCamera();
+            OnAwake();
+        }
+        protected virtual void OnAwake() {}
 
         protected internal static Camera mainCamera => _mainCamera;
 
@@ -88,8 +88,6 @@ namespace UBER.Util
         /// </summary>
         public new Light light => _light ? _light : _light = GetComponent<Light>();
 
-        protected Light light2D => _light2D ? _light2D : _light2D = transform.Find("Light").GetComponent<Light>();
-
         /// <summary>
         ///     Gets the ParticleSystem attached to the object.
         /// </summary>
@@ -109,21 +107,6 @@ namespace UBER.Util
         ///     Gets the Transform attached to the object.
         /// </summary>
         protected new Transform transform => _transform ? _transform : _transform = base.transform;
-
-        protected RectTransform rectTransform => _rectTransform ? _rectTransform : _rectTransform = GetComponent<RectTransform>();
-
-        protected CanvasGroup canvasGroup => _canvasGroup ? _canvasGroup : _canvasGroup = GetComponent<CanvasGroup>();
-
-        protected TextMeshPro textMeshPro => _textMeshPro ? _textMeshPro : _textMeshPro = transform.Find("Text").GetComponent<TextMeshPro>();
-
-        protected SpriteRenderer spriteRenderer => _spriteRenderer ? _spriteRenderer : _spriteRenderer = GetComponent<SpriteRenderer>();
-        private void Awake()
-        {
-            _mainCamera = GetMainCamera();
-            OnAwake();
-        }
-        protected virtual void OnAwake() {}
-
-        private static Camera GetMainCamera() => _mainCamera ? _mainCamera : _mainCamera = Camera.main;
+        private Camera GetMainCamera() => _mainCamera ? _mainCamera : _mainCamera = Camera.main;
     }
 }

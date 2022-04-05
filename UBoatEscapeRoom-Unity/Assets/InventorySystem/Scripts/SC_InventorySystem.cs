@@ -1,24 +1,8 @@
-﻿#region Copyright Notice
-
-// ******************************************************************************************************************
-// 
-// UBoatEscapeRoom-Unity.UBER.SC_InventorySystem.cs © SilentWolf6662 - All Rights Reserved
-// Unauthorized copying of this file, via any medium is strictly prohibited
-// Proprietary and confidential
-// 
-// This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
-// To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
-// 
-// Created & Copyrighted @ 2022-04-05
-// 
-// ******************************************************************************************************************
-
-#endregion
-#region
+﻿//You are free to use this script in Free or Commercial projects
+//sharpcoderblog.com @2019
 
 using UnityEngine;
 
-#endregion
 public class SC_InventorySystem : MonoBehaviour
 {
     public Texture crosshairTexture;
@@ -26,19 +10,19 @@ public class SC_InventorySystem : MonoBehaviour
     public SC_PickItem[] availableItems; //List with Prefabs of all the available items
 
     //Available items slots
-    private readonly int[] itemSlots = new int[12];
-    private float animationTimer;
-
-    //Item Pick up
-    private SC_PickItem detectedItem;
-    private int detectedItemIndex;
-    private Vector2 dragOffset = Vector2.zero;
+    private int[] itemSlots = new int[12];
+    private bool showInventory = false;
+    private float windowAnimation = 1;
+    private float animationTimer = 0;
 
     //UI Drag & Drop
     private int hoveringOverIndex = -1;
     private int itemIndexToDrag = -1;
-    private bool showInventory;
-    private float windowAnimation = 1;
+    private Vector2 dragOffset = Vector2.zero;
+
+    //Item Pick up
+    private SC_PickItem detectedItem;
+    private int detectedItemIndex;
 
     // Start is called before the first frame update
     private void Start()
@@ -48,7 +32,9 @@ public class SC_InventorySystem : MonoBehaviour
 
         //Initialize Item Slots
         for (int i = 0; i < itemSlots.Length; i++)
+        {
             itemSlots[i] = -1;
+        }
     }
 
     // Update is called once per frame
@@ -73,7 +59,9 @@ public class SC_InventorySystem : MonoBehaviour
         }
 
         if (animationTimer < 1)
+        {
             animationTimer += Time.deltaTime;
+        }
 
         if (showInventory)
         {
@@ -88,7 +76,9 @@ public class SC_InventorySystem : MonoBehaviour
 
         //Begin item drag
         if (Input.GetMouseButtonDown(0) && hoveringOverIndex > -1 && itemSlots[hoveringOverIndex] > -1)
+        {
             itemIndexToDrag = hoveringOverIndex;
+        }
 
         //Release dragged item
         if (Input.GetMouseButtonUp(0) && itemIndexToDrag > -1)
@@ -96,7 +86,7 @@ public class SC_InventorySystem : MonoBehaviour
             if (hoveringOverIndex < 0)
             {
                 //Drop the item outside
-                Instantiate(availableItems[itemSlots[itemIndexToDrag]], playerController.playerCamera.transform.position + playerController.playerCamera.transform.forward, Quaternion.identity);
+                Instantiate(availableItems[itemSlots[itemIndexToDrag]], playerController.playerCamera.transform.position + (playerController.playerCamera.transform.forward), Quaternion.identity);
                 itemSlots[itemIndexToDrag] = -1;
             }
             else
@@ -112,22 +102,26 @@ public class SC_InventorySystem : MonoBehaviour
 
         //Item pick up
         if (detectedItem && detectedItemIndex > -1)
+        {
             if (Input.GetKeyDown(KeyCode.F))
             {
                 //Add the item to inventory
                 int slotToAddTo = -1;
                 for (int i = 0; i < itemSlots.Length; i++)
+                {
                     if (itemSlots[i] == -1)
                     {
                         slotToAddTo = i;
                         break;
                     }
+                }
                 if (slotToAddTo > -1)
                 {
                     itemSlots[slotToAddTo] = detectedItemIndex;
                     detectedItem.PickItem();
                 }
             }
+        }
     }
 
     private void FixedUpdate()
@@ -148,18 +142,24 @@ public class SC_InventorySystem : MonoBehaviour
 
                     //Check if item is in availableItemsList
                     for (int i = 0; i < availableItems.Length; i++)
+                    {
                         if (availableItems[i].itemName == itemTmp.itemName)
                         {
                             detectedItem = itemTmp;
                             detectedItemIndex = i;
                         }
+                    }
                 }
             }
             else
+            {
                 detectedItem = null;
+            }
         }
         else
+        {
             detectedItem = null;
+        }
     }
 
     private void OnGUI()
@@ -170,7 +170,7 @@ public class SC_InventorySystem : MonoBehaviour
         //Inventory window
         if (windowAnimation < 1)
         {
-            GUILayout.BeginArea(new Rect(10 - 430 * windowAnimation, Screen.height / 2 - 200, 302, 430), GUI.skin.GetStyle("box"));
+            GUILayout.BeginArea(new Rect(10 - (430 * windowAnimation), Screen.height / 2 - 200, 302, 430), GUI.skin.GetStyle("box"));
 
             GUILayout.Label("Inventory", GUILayout.Height(25));
 
@@ -180,21 +180,30 @@ public class SC_InventorySystem : MonoBehaviour
                 GUILayout.BeginHorizontal();
                 //Display 3 items in a row
                 for (int a = 0; a < 3; a++)
+                {
                     if (i + a < itemSlots.Length)
                     {
-                        if (itemIndexToDrag == i + a || itemIndexToDrag > -1 && hoveringOverIndex == i + a)
+                        if (itemIndexToDrag == i + a || (itemIndexToDrag > -1 && hoveringOverIndex == i + a))
+                        {
                             GUI.enabled = false;
+                        }
 
                         if (itemSlots[i + a] > -1)
                         {
                             if (availableItems[itemSlots[i + a]].itemPreview)
+                            {
                                 GUILayout.Box(availableItems[itemSlots[i + a]].itemPreview, GUILayout.Width(95), GUILayout.Height(95));
+                            }
                             else
+                            {
                                 GUILayout.Box(availableItems[itemSlots[i + a]].itemName, GUILayout.Width(95), GUILayout.Height(95));
+                            }
                         }
                         else
+                        {
                             //Empty slot
                             GUILayout.Box("", GUILayout.Width(95), GUILayout.Height(95));
+                        }
 
                         //Detect if the mouse cursor is hovering over item
                         Rect lastRect = GUILayoutUtility.GetLastRect();
@@ -203,17 +212,22 @@ public class SC_InventorySystem : MonoBehaviour
                         {
                             hoveringOverIndex = i + a;
                             if (itemIndexToDrag < 0)
+                            {
                                 dragOffset = new Vector2(lastRect.x - eventMousePositon.x, lastRect.y - eventMousePositon.y);
+                            }
                         }
 
                         GUI.enabled = true;
                     }
+                }
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndVertical();
 
             if (Event.current.type == EventType.Repaint && !GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+            {
                 hoveringOverIndex = -1;
+            }
 
             GUILayout.EndArea();
         }
@@ -222,14 +236,20 @@ public class SC_InventorySystem : MonoBehaviour
         if (itemIndexToDrag > -1)
         {
             if (availableItems[itemSlots[itemIndexToDrag]].itemPreview)
+            {
                 GUI.Box(new Rect(Input.mousePosition.x + dragOffset.x, Screen.height - Input.mousePosition.y + dragOffset.y, 95, 95), availableItems[itemSlots[itemIndexToDrag]].itemPreview);
+            }
             else
+            {
                 GUI.Box(new Rect(Input.mousePosition.x + dragOffset.x, Screen.height - Input.mousePosition.y + dragOffset.y, 95, 95), availableItems[itemSlots[itemIndexToDrag]].itemName);
+            }
         }
 
         //Display item name when hovering over it
         if (hoveringOverIndex > -1 && itemSlots[hoveringOverIndex] > -1 && itemIndexToDrag < 0)
+        {
             GUI.Box(new Rect(Input.mousePosition.x, Screen.height - Input.mousePosition.y - 30, 100, 25), availableItems[itemSlots[hoveringOverIndex]].itemName);
+        }
 
         if (!showInventory)
         {

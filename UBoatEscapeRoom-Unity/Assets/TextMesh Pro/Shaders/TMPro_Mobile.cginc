@@ -1,44 +1,28 @@
-﻿// ******************************************************************************************************************
-//                                                                                                             
-// UBoatEscapeRoom-Unity.UBER.Player.TMPro_Mobile.cginc © SilentWolf6662 - All Rights Reserved
-// Unauthorized copying of this file, via any medium is strictly prohibited                                    
-// Proprietary and confidential                                                                                
-//                                                                                                             
-// This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.   
-// To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/                     
-//                                                                                                             
-// Created & Copyrighted @ 2022-04-05                                                                                   
-//                                                                                                             
-// ******************************************************************************************************************
-
-struct vertex_t
-{
+﻿struct vertex_t {
     UNITY_VERTEX_INPUT_INSTANCE_ID
-    float4 position : POSITION;
-    float3 normal : NORMAL;
-    float4 color : COLOR;
-    float2 texcoord0 : TEXCOORD0;
-    float2 texcoord1 : TEXCOORD1;
+    float4	position		: POSITION;
+    float3	normal			: NORMAL;
+    float4	color			: COLOR;
+    float2	texcoord0		: TEXCOORD0;
+    float2	texcoord1		: TEXCOORD1;
 };
 
-struct pixel_t
-{
+struct pixel_t {
     UNITY_VERTEX_INPUT_INSTANCE_ID
     UNITY_VERTEX_OUTPUT_STEREO
-    float4 position : SV_POSITION;
-    float4 faceColor : COLOR;
-    float4 outlineColor : COLOR1;
-    float4 texcoord0 : TEXCOORD0;
-    float4 param : TEXCOORD1;		// weight, scaleRatio
-    float2 mask : TEXCOORD2;
+    float4	position		: SV_POSITION;
+    float4	faceColor		: COLOR;
+    float4	outlineColor	: COLOR1;
+    float4	texcoord0		: TEXCOORD0;
+    float4	param			: TEXCOORD1;		// weight, scaleRatio
+    float2	mask			: TEXCOORD2;
     #if (UNDERLAY_ON || UNDERLAY_INNER)
     float4	texcoord2		: TEXCOORD3;
     float4	underlayColor	: COLOR2;
     #endif
 };
 
-float4 SRGBToLinear(float4 rgba)
-{
+float4 SRGBToLinear(float4 rgba) {
     return float4(lerp(rgba.rgb / 12.92f, pow((rgba.rgb + 0.055f) / 1.055f, 2.4f), step(0.04045f, rgba.rgb)), rgba.a);
 }
 
@@ -51,13 +35,13 @@ pixel_t VertShader(vertex_t input)
     UNITY_TRANSFER_INSTANCE_ID(input, output);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
-    const float bold = step(input.texcoord1.y, 0);
+    float bold = step(input.texcoord1.y, 0);
 
     float4 vert = input.position;
     vert.x += _VertexOffsetX;
     vert.y += _VertexOffsetY;
 
-    const float4 vPosition = UnityObjectToClipPos(vert);
+    float4 vPosition = UnityObjectToClipPos(vert);
 
     float weight = lerp(_WeightNormal, _WeightBold, bold) / 4.0;
     weight = (weight + _FaceDilate) * _ScaleRatioA * 0.5;
@@ -89,7 +73,7 @@ pixel_t VertShader(vertex_t input)
     output.texcoord0 = float4(input.texcoord0.xy, maskUV.xy);
     output.param = float4(0.5 - weight, 1.3333 * _GradientScale * (_Sharpness + 1) / _TextureWidth, _OutlineWidth * _ScaleRatioA * 0.5, 0);
 
-    const float2 mask = float2(0, 0);
+    float2 mask = float2(0, 0);
     #if UNITY_UI_CLIP_RECT
     mask = vert.xy * 2 - clampedRect.xy - clampedRect.zw;
     #endif
@@ -113,7 +97,7 @@ float4 PixShader(pixel_t input) : SV_Target
 {
     UNITY_SETUP_INSTANCE_ID(input);
 
-    const float d = tex2D(_MainTex, input.texcoord0.xy).a;
+    float d = tex2D(_MainTex, input.texcoord0.xy).a;
 
     float2 UV = input.texcoord0.xy;
     float scale = rsqrt(abs(ddx(UV.x) * ddy(UV.y) - ddy(UV.x) * ddx(UV.y))) * input.param.y;
@@ -124,7 +108,7 @@ float4 PixShader(pixel_t input) : SV_Target
     float layerBias = input.param.x * layerScale - .5 - ((_UnderlayDilate * _ScaleRatioC) * .5 * layerScale);
     #endif
 
-    scale /= 1 + _OutlineSoftness * _ScaleRatioA * scale;
+    scale /= 1 + (_OutlineSoftness * _ScaleRatioA * scale);
 
     float4 faceColor = input.faceColor * saturate((d - input.param.x) * scale + 0.5);
 

@@ -1,28 +1,22 @@
 ﻿#region Copyright Notice
-
 // ******************************************************************************************************************
 // 
-// UBoatEscapeRoom-Unity.UBER.InteractableSystem.cs © SilentWolf6662 - All Rights Reserved
+// UBoatEscapeRoom-Unity.UBER.InteractSystem.cs © SilentWolf6662 - All Rights Reserved
 // Unauthorized copying of this file, via any medium is strictly prohibited
 // Proprietary and confidential
 // 
 // This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 // To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/
 // 
-// Created & Copyrighted @ 2022-04-05
+// Created & Copyrighted @ 2022-03-22
 // 
 // ******************************************************************************************************************
-
 #endregion
-#region
-
 using System;
 using UBER.Util;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-
-#endregion
 namespace UBER.Core.Interaction
 {
     public class InteractableSystem : CacheBehaviour2D, IPointerClickHandler
@@ -30,29 +24,18 @@ namespace UBER.Core.Interaction
         [SerializeField] private InputAction playerInteractionAction;
         [SerializeField] private Inventory.System inventorySystem;
         [SerializeField] private UI_Inventory uiInventory;
-
+        
 
         public Vector2 mousePosition;
-        private bool hasInteracted;
         public RaycastHit2D hit;
-        private float interactInput;
-        private UBER.Inventory.Inventory inventory;
         private GameObject objectHit;
-
-        private void Update()
-        {
-            InputHandler();
-            InteractHandler();
-        }
+        private UBER.Inventory.Inventory inventory;
+        private float interactInput;
+        private bool hasInteracted;
 
         private void OnEnable() => playerInteractionAction.Enable();
 
         private void OnDisable() => playerInteractionAction.Disable();
-        public void OnPointerClick(PointerEventData eventData) // 3
-        {
-            print("I was clicked");
-            if (eventData.pointerClick.CompareTag("InventoryBtn")) inventorySystem.showInventory = !inventorySystem.showInventory;
-        }
 
         protected override void OnAwake()
         {
@@ -75,12 +58,25 @@ namespace UBER.Core.Interaction
                     throw new NotImplementedException();
             }
         }
+
+        private void Update()
+        {
+            InputHandler();
+            InteractHandler();
+        }
         private void Interaction()
         {
 
-            if (!playerInteractionAction.triggered || hit.collider == null) return;
-            objectHit = hit.collider.gameObject;
-            if (objectHit != null) hasInteracted = true;
+            if (playerInteractionAction.triggered && hit.collider != null)
+            {
+                objectHit = hit.collider.gameObject;
+                if (objectHit != null) hasInteracted = true;
+            }
+        }
+        public void OnPointerClick(PointerEventData eventData) // 3
+        {
+            print("I was clicked");
+            if (eventData.pointerClick.CompareTag("InventoryBtn")) inventorySystem.showInventory = !inventorySystem.showInventory;
         }
         private void InteractHandler()
         {
@@ -99,8 +95,14 @@ namespace UBER.Core.Interaction
 
         public static RaycastHit2D GetMouseRayHit(Vector2 mousePos) => Physics2D.Raycast(mainCamera.ScreenToWorldPoint(mousePos), Vector2.zero);
 
-        private void KeyBehaviour() => throw new NotImplementedException();
+        private void KeyBehaviour()
+        {
+            throw new NotImplementedException();
+        }
 
-        private void NoteBehaviour() => throw new NotImplementedException();
+        private void NoteBehaviour()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
